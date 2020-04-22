@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"log"
-	"main/Models"
-	pbMediaMetadata "main/proto/media_metadata"
-	"strconv"
+	"go-image-worker/Models"
+	pbMediaMetadata "go-image-worker/proto/media_metadata"
 )
 
 
@@ -16,21 +15,19 @@ type MediaMetadataClient struct {
 	client pbMediaMetadata.MediaMetadataClient
 }
 
-func (mediaMetadataClient *MediaMetadataClient) UpdateMediaMetadata(mediaMetadata *Models.MediaMetadata) (*pbMediaMetadata.MediaMetadataResponse, error)  {
-
-	createdAt, _ := strconv.ParseInt(mediaMetadata.CreatedAt, 10, 64)
+func (mediaMetadataClient *MediaMetadataClient) UpdateMediaMetadata(mediaMetadata *pbMediaMetadata.MediaMetadataResponse) (*pbMediaMetadata.MediaMetadataResponse, error)  {
 
 	response, err := mediaMetadataClient.client.UpdateMediaMetadata(context.Background(), &pbMediaMetadata.UpdateMediaRequest{
-		MediaId:                  int32(mediaMetadata.MediaId),
-		Name:                     mediaMetadata.Name,
-		SiteName:                 mediaMetadata.SiteName,
-		Length:                   int32(mediaMetadata.Length),
-		Status:                   3,
-		Thumbnail:                mediaMetadata.Thumbnail,
-		ProjectId:                int32(mediaMetadata.ProjectId),
-		AwsBucketWholeMedia:      mediaMetadata.AwsBucketWholeMedia,
-		AwsStorageNameWholeMedia: mediaMetadata.AwsStorageNameWholeMedia,
-		CreatedAt:                createdAt,
+		MediaId:                  mediaMetadata.GetMediaId(),
+		Name:                     mediaMetadata.GetName(),
+		SiteName:                 mediaMetadata.GetSiteName(),
+		Length:                   mediaMetadata.GetLength(),
+		Status:                   mediaMetadata.GetStatus(),
+		Thumbnail:                mediaMetadata.GetThumbnail(),
+		ProjectId:                mediaMetadata.GetProjectId(),
+		AwsBucketWholeMedia:      mediaMetadata.GetAwsBucketWholeMedia(),
+		AwsStorageNameWholeMedia: mediaMetadata.GetAwsStorageNameWholeMedia(),
+		CreatedAt:                mediaMetadata.GetCreatedAt(),
 	})
 
 	if err != nil {
@@ -40,6 +37,18 @@ func (mediaMetadataClient *MediaMetadataClient) UpdateMediaMetadata(mediaMetadat
 	return response, nil
 }
 
+func (mediaMetadataClient *MediaMetadataClient) GetMediaMetadata(mediaId int32) (*pbMediaMetadata.MediaMetadataResponse, error) {
+
+	response, err := mediaMetadataClient.client.GetMediaMetadata(context.Background(), &pbMediaMetadata.GetMediaMetadataRequest{
+		MediaId:              mediaId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
 
 func InitMediaMetadataGrpcClient() *MediaMetadataClient  {
 	env := Models.GetEnvStruct()

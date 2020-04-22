@@ -18,6 +18,8 @@ type Env struct {
 	AwsStorageGrpcPort string
 	TimeShiftGrpcServer string
 	TimeShiftGrpcPort string
+	MediaMetadataGrpcServer string
+	MediaMetadataGrpcPort string
 }
 
 func InitEnv()  {
@@ -32,6 +34,8 @@ func InitEnv()  {
 		AwsStorageGrpcPort:			os.Getenv("AWS_STORAGE_GRPC_PORT"),
 		TimeShiftGrpcServer:        os.Getenv("TIMESHIFT_GRPC_SERVER"),
 		TimeShiftGrpcPort: 			os.Getenv("TIMESHIFT_GRPC_PORT"),
+		MediaMetadataGrpcServer: 	os.Getenv("MEDIA_METADATA_GRPC_SERVER"),
+		MediaMetadataGrpcPort:   	os.Getenv("MEDIA_METADATA_GRPC_PORT"),
 	}
 	fmt.Println(envStruct)
 }

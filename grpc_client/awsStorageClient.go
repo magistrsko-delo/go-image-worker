@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc"
 	"io"
 	"log"
-	"main/Models"
-	pbAwsStorage "main/proto/aws_storage"
+	"go-image-worker/Models"
+	pbAwsStorage "go-image-worker/proto/aws_storage"
 	"os"
 )
 

@@ -15,6 +15,7 @@ import (
 	pbTimeshift "go-image-worker/proto/timeshift_service"
 	pbMediaMetadata "go-image-worker/proto/media_metadata"
 	"strings"
+	"time"
 )
 
 type Worker struct {
@@ -89,8 +90,10 @@ func (worker *Worker) Work()  {
 				log.Println(err)
 			}
 
-			worker.removeFile("./assets/" + strings.Replace(mediaChunks[chunkIndex].GetAwsStorageName(), ".ts", ".mp4", 1))
-			worker.removeFile("./assets/chunks/" + mediaChunks[chunkIndex].GetAwsStorageName())
+			time.Sleep(1 * time.Second)
+
+			// worker.removeFile("./assets/" + strings.Replace(mediaChunks[chunkIndex].GetAwsStorageName(), ".ts", ".mp4", 1))
+			// worker.removeFile("./assets/chunks/" + mediaChunks[chunkIndex].GetAwsStorageName())
 
 			log.Printf("Done")
 			_ = d.Ack(false)
@@ -122,7 +125,9 @@ func (worker *Worker) getMediaScreenShot(chunksData *pbTimeshift.ChunkResponse, 
 		return "" , err
 	}
 
-	worker.removeFile("./assets/" + imageName)
+	time.Sleep(2 * time.Second)
+
+	// worker.removeFile("./assets/" + imageName)
 	return "v1/mediaManager/mag20-images/" + imageName, nil
 }
 

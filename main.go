@@ -1,10 +1,12 @@
 package main
 
 import (
+	"crypto/tls"
 	"github.com/joho/godotenv"
 	"go-image-worker/Models"
 	"go-image-worker/Worker"
 	"log"
+	"net/http"
 )
 
 func init()  {
@@ -16,6 +18,7 @@ func init()  {
 
 
 func main()  {
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 	worker := Worker.InitWorker()
 	defer worker.RabbitMQ.Conn.Close()
 	defer worker.RabbitMQ.Ch.Close()
